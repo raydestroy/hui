@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -54,6 +55,7 @@ public class ExampleUnitTest {
         }
         return xinwenjian;
     }
+
     /**
      *
      * @param f
@@ -61,17 +63,17 @@ public class ExampleUnitTest {
      * @param  daxiao 兆大小
      * @return
      */
-    public static String fengewenjian(File f, String wenjianming,int  daxiao) {
+    public static String fengewenjian(File f, String wenjianming, int daxiao) {
         InputStream reader = null;
         try {
 
             if (f.isFile() && f.exists()) {
                 reader = new FileInputStream(f);
 
-                byte[] buffer = new byte[ daxiao];
+                byte[] buffer = new byte[daxiao];
                 int count;
                 boolean diyig = true;
-
+                ArrayList<File> list = new ArrayList<>();
                 while ((count = reader.read(buffer)) != -1) {
 
                     File ff = new File(f.getAbsolutePath().split(f.getName())[0] + wenjianming);
@@ -85,13 +87,16 @@ public class ExampleUnitTest {
                         }
                     }
                     ff = xunhuanchongmingming(ff, 1);
-
+                    list.add(ff);
                     FileOutputStream fos = new FileOutputStream(ff);
                     fos.write(buffer, 0, count);
                     fos.close();
-
                 }
-
+                for (File ff : list) {
+                    ff.renameTo(new File(f.getAbsolutePath().split(f.getName())[0] + MD5.md5(ff.getName())));
+                    System.out.println("Name::" + ff.getName());
+                    System.out.println("MD5::" + MD5.md5(ff.getName()));
+                }
 
             }
             return "成功";
@@ -111,7 +116,7 @@ public class ExampleUnitTest {
 
     @Test
     public void addition_isCorrect() {
-        String chengong= fengewenjian(new File("D:\\xiazai\\a.gif"), "bba", 100*1024);
+        String chengong = fengewenjian(new File("D:\\xiazai\\BetterIntelliJ.zip"), "bba", 3000 * 1024);
 
         System.out.println(" B:" + chengong);
     }
