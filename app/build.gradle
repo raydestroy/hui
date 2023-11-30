@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+import java.text.SimpleDateFormat
+
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 def storePath = properties.getProperty('keyStorePath')
@@ -22,7 +24,7 @@ android {
         renderscriptTargetApi 21
         renderscriptSupportModeEnabled true
         ndk {
-            abiFilters  "armeabi-v7a"//, "armeabi","x86", "arm64-v8a""armeabi",
+            abiFilters "armeabi-v7a"//, "armeabi","x86", "arm64-v8a""armeabi",
 //, "mips", "mips64", 'x86_64', 'arm64-v8a'
         }        // Android 需要支持的 CPU 类型，分别有 armeabi-v7a、arm64-v8a、x86 三种类型。
         vectorDrawables.useSupportLibrary = true
@@ -68,11 +70,32 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled true//缩小APk大小;true打包后无法播放视频
-            proguardFiles  'proguard-rules.pro'
+            proguardFiles 'proguard-rules.pro'
         }
         debug {
             minifyEnabled false
-            proguardFiles  'proguard-rules.pro'
+            proguardFiles 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions "default"
+    productFlavors {
+        hwtest {
+        }
+
+
+        hwprod {
+        }
+
+
+        xmprod {
+        }
+        xmtest {
+        }
+
+    }
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "App_${variant.versionName}_${getName(productFlavors[0].name)}_${getTime()}_${variant.buildType.name}.apk"
         }
     }
     sourceSets {
@@ -83,18 +106,36 @@ android {
 
 }
 
-dependencies {
-    //implementation fileTree(dir: "libs", include: ["*.jar"])
+def static getTime() {
+    def dd = new SimpleDateFormat("yyyyMMddHHmm")
+    return dd.format(new Date())
+}
 
+def static getName(flavor) {
+    int index = flavor.indexOf("_")
+    if (index < 0 || index == flavor.lengh()) {
+        return flavor
+    }
+    return flavor.substring(index + 1)
+}
+
+dependencies {
+    //jar
     implementation fileTree(include: ['*.?ar'], dir: 'libs')
     //implementation files('libs/alipaySdk-15.5.7-20181023110917.aar')
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment:2.3.1'
-    implementation 'androidx.navigation:navigation-ui:2.3.1'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'com.example:example:1.1-SNAPSHOT'
+
+    //AndroidX
+    implementation appcompat
+    implementation material
+    implementation constraintlayout
+    implementation navigationfragment
+    implementation navigationui
+
+//    implementation kotlinstdlib
+//    implementation kotlinCoroutinesCore
+//    implementation kotlinCoroutinesAndroid
+//    implementation kotlinCore
+    testImplementation junit
+    androidTestImplementation androidjunit
+    androidTestImplementation espresso
 }
