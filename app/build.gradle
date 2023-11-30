@@ -131,10 +131,10 @@ dependencies {
     implementation navigationfragment
     implementation navigationui
 
-//    implementation kotlinstdlib
-//    implementation kotlinCoroutinesCore
-//    implementation kotlinCoroutinesAndroid
-//    implementation kotlinCore
+    implementation kotlinstdlib
+    implementation kotlinCoroutinesCore
+    implementation kotlinCoroutinesAndroid
+    implementation kotlinCore
     testImplementation junit
     androidTestImplementation androidjunit
     androidTestImplementation espresso
