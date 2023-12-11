@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+
+apply plugin: 'kotlin-android-extensions'
 import java.text.SimpleDateFormat
 
 Properties properties = new Properties()
@@ -124,6 +126,11 @@ dependencies {
     implementation fileTree(include: ['*.?ar'], dir: 'libs')
     //implementation files('libs/alipaySdk-15.5.7-20181023110917.aar')
 
+    implementation kotlinstdlib
+    implementation kotlinCoroutinesCore
+    implementation kotlinCoroutinesAndroid
+    implementation kotlinCore
+
     //AndroidX
     implementation appcompat
     implementation material
@@ -131,10 +138,13 @@ dependencies {
     implementation navigationfragment
     implementation navigationui
 
-    implementation kotlinstdlib
-    implementation kotlinCoroutinesCore
-    implementation kotlinCoroutinesAndroid
-    implementation kotlinCore
+   // implementation BaseRecyclerViewAdapterHelper4
+    implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+
+
+
     testImplementation junit
     androidTestImplementation androidjunit
     androidTestImplementation espresso
